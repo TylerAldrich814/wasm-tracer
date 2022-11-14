@@ -29,9 +29,22 @@ impl Ray {
 }
 
 fn ray_color(r: &Ray) -> Color {
+    if hit_sphere(&Point3::new(0., 0.1, -1.0), 0.5, r) {
+        return Color::new(1., 0., 0.);
+    }
     let unit_direction = unit_vector(*r.direction());
     let t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * Color::new(1.0, 1.0, 1.0) + t * Color::new(0.5, 0.7, 1.0);
+}
+
+fn hit_sphere(center: &Point3, radius: f32, r: &Ray) -> bool {
+    let oc = r.origin() - center;
+    let a = dot(r.direction(), r.direction());
+    let b = 2.0 * dot(&oc, r.direction());
+    let c = dot(&oc, &oc) - radius * radius;
+    let discriminant = b * b - 4.0 * a * c;
+
+    return discriminant > 0.0;
 }
 
 impl Render {
@@ -69,7 +82,6 @@ impl Render {
                     0x_FF,
                 ];
 
-                // buffer[y * width + x] = f.wrapping_add(as_u32_le(pixel_colors) | 0xFF_00_00_00);
                 buffer[y * width + x] = as_u32_le(pixel_colors);
             }
         }
@@ -82,33 +94,12 @@ impl Render {
             }
         }
     }
-
-    fn write_color(pixel_color: &Color) -> u32 {
-        let rgbmax = 255.000;
-        let r = (pixel_color.x() * rgbmax) as u8;
-        let g = (pixel_color.y() * rgbmax) as u8;
-        let b = (pixel_color.z() * rgbmax) as u8;
-
-        return as_u32_le([r, g, b, 0xFF]);
-    }
 }
 
+// Takes an Array of 4 u8's and converts them into an u32, little Endian
 fn as_u32_le(arr: [u8; 4]) -> u32 {
     ((arr[0] as u32) << 0)
         + ((arr[1] as u32) << 8)
         + ((arr[2] as u32) << 16)
         + ((arr[3] as u32) << 24)
 }
-
-// pub fn examplerender_frame_safe(buffer: &mut Buff) {
-//     unsafe {
-//         // Not sure why we need a second unsafe here when this fn will be wrapped in unsafe..
-//         let f = FRAME.fetch_add(1, Ordering::Relaxed);
-
-//         for y in 0..HEIGHT {
-//             for x in 0..WIDTH {
-//                 buffer[y * WIDTH + x] = f.wrapping_add((x ^ y) as u32 | 0xFF_00_00_00);
-//             }
-//         }
-//     }
-// }

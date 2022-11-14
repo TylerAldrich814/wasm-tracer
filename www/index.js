@@ -31,22 +31,25 @@ async function init() {
   const render = () => {
     if( stop ){ return }
     
-    instance.exports.go();
-    // ctx.putImageData(image, 0, 0);
-    requestAnimationFrame(render);
+    requestAnimationFrame( render );
     
     now = Date.now();
     elapsed = now - then;
     if( elapsed > fpsInterval ){
       then = now - (elapsed % fpsInterval);
 
-      ctx.putImageData(image, 0, 0);
+      instance.exports.go();
+      ctx.putImageData( image, 0, 0 );
     }
     
     if( inDev ){
       var sinceStart = now = startTime;
-      var currentFps = Math.round(1000 / (sinceStart / ++frameCount) * 100);
-      console.log(`{} FPS`, currentFps);
+      var currentFps = Math.round( 1000 / (sinceStart / ++frameCount) * 100 );
+      console.log(        
+        `Elapsed Time: {}\nFPS: {}`,
+        Math.round(sinceStart / 1000 * 100) / 100,
+        currentFps
+      );
     }
   };
 
