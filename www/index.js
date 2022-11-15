@@ -1,4 +1,3 @@
-
 async function init() {
   const { instance } = await WebAssembly.instantiateStreaming(
     fetch("./wasm_tracer.wasm")
@@ -11,7 +10,7 @@ async function init() {
   canvas.height = height;
   
   const buffer_address = instance.exports.BUFFER.value;
-  const image = new ImageData(
+    const image = new ImageData(
     new Uint8ClampedArray(
       instance.exports.memory.buffer,
       buffer_address,
@@ -19,16 +18,16 @@ async function init() {
     ),
     width,
   );
+  
   const ctx = canvas.getContext("2d");
 
   var inDev = false;
-  
-  
   var stop = false;
   var frameCount = 0;
   var fps, fpsInterval, startTime, now, then, elapsed;
 
   const render = () => {
+    
     if( stop ){ return }
     
     requestAnimationFrame( render );
@@ -61,9 +60,12 @@ async function init() {
 
     render();
   };
-  startAnimation(30);
+
+  startAnimation(3);
+  
   // instance.exports.go();        
   // ctx.putImageData(image, 0, 0);
-} // end async init();
+} // end async init();u
 
 init();
+
