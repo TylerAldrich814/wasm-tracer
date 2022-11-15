@@ -3,7 +3,30 @@ use std::ops;
 pub type Color = Vec3<f32>;
 pub type Point3 = Vec3<f32>;
 
-#[derive(Clone, Copy)]
+impl Color {
+    #[inline]
+    pub fn white() -> Color {
+        Color::new(1.0, 1.0, 1.0)
+    }
+    #[inline]
+    pub fn black() -> Color {
+        Color::new(0.0, 0.0, 0.0)
+    }
+    #[inline]
+    pub fn red() -> Color {
+        Color::new(1.0, 0.0, 0.0)
+    }
+    #[inline]
+    pub fn green() -> Color {
+        Color::new(0.0, 1.0, 0.0)
+    }
+    #[inline]
+    pub fn blue() -> Color {
+        Color::new(0.0, 0.0, 1.0)
+    }
+}
+
+#[derive(Default, Debug, Clone, Copy)]
 pub struct Vec3<V: Sized + Clone> {
     d: [V; 3],
 }
@@ -95,6 +118,16 @@ impl ops::DivAssign<Vec3<f32>> for Vec3<f32> {
     }
 }
 
+impl ops::Neg for &Vec3<f32> {
+    type Output = Vec3<f32>;
+
+    fn neg(self) -> Vec3<f32> {
+        let k = self.d;
+        Vec3 {
+            d: [k[0] * -1.0, k[1] * -1.0, k[2] * -1.0],
+        }
+    }
+}
 impl ops::Neg for Vec3<f32> {
     type Output = Vec3<f32>;
 
