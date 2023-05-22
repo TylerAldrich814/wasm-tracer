@@ -1,4 +1,4 @@
-# A Simplistic Ray Tracer, Written in Rust, Compuled in WebAssembly
+# A Simplistic Ray Tracer, Written in Rust, Compiled in WebAssembly
 ## Nothing Serious.
 
 ###### NOTE: This(currently) does not work in Safari. Everything worked
